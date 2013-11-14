@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Status Search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	
+	<script src="phonegap.js"></script>
+	<script src="childbrowser.js"></script>
+	<script src="cdv-plugin-fb-connect.js"></script>
+	<script src="facebook-js-sdk.js"></script> 
+    <link href="css/bootstrap.css" rel="stylesheet">
+	
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+		color: #ffffff;
+		background-color:#54a3ed;
+      }
+	  	  
+	  #load_msg{
+			  visibility:hidden;
+	  }
+	  
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+	<script src="js/jquery.js"></script>
+	
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="ico/favicon.png">
+  </head>
+
+  <body>
+  
+	<div id="fb-root"></div>
+	<!-- <script src="http://connect.facebook.net/en_US/all.js"></script> -->
+
+    <script type="text/javascript">
+
+	
+	document.addEventListener('deviceready', function() {
+                                      try {
+                                      //alert('Device is ready');
+                                      FB.init({ appId: 509424099141300, nativeInterface: CDV.FB, useCachedDialogs: false });
+                                      } catch (e) {
+                                      alert("Please check your network connection");
+                                      }
+                                      }, false);
+									  
+      // Initialize the Facebook JavaScript SDK
+     /* FB.init({
+        appId: 509424099141300,
+        xfbml: true,
+        status: true,
+        cookie: true,
+      }); */
+
+      // Check if the current user is logged in and has authorized the app
+      //FB.getLoginStatus(checkLoginStatus);
+	  
+	  function checkConnection() {
+				var networkState = navigator.network.connection.type;
+
+				var states = {};
+				states[Connection.UNKNOWN]  = 'Unknown connection';
+				states[Connection.ETHERNET] = 'Ethernet connection';
+				states[Connection.WIFI]     = 'WiFi connection';
+				states[Connection.CELL_2G]  = 'Cell 2G connection';
+				states[Connection.CELL_3G]  = 'Cell 3G connection';
+				states[Connection.CELL_4G]  = 'Cell 4G connection';
+				states[Connection.NONE]     = 'No network connection';
+
+				//alert('Connection type: ' + states[networkState]);
+				return states[networkState];
+		}
+
+
+      // Login in the current user via Facebook and ask for email permission
+      function authUser() {
+		document.getElementById("load_msg").style.visibility = "visible";
+		
+		if(checkConnection() == "No network connection"){
+				alert("Please check your network connection");
+				document.getElementById("load_msg").style.visibility = "hidden";
+		}
+		
+		else{
+		
+/*			FB.getLoginStatus(function(response) {
+				if (response.status === 'connected') {
+									
+							});
+					} else if (response.status === 'not_authorized') {
+								FB.login(checkLoginStatus, {scope:'email'});
+				} else {
+								FB.login(checkLoginStatus);
+				}
+		}); */
+		
+		
+		FB.login(checkLoginStatus, {scope:'email'});
+		document.getElementById("load_msg").style.visibility = "hidden";
+		
+		}
+      }
+
+      // Check the result of the user status and display login button if necessary
+      function checkLoginStatus(response) {
+        if(response && response.status == 'connected') {
+					//alert('User is authorized');
+					window.location.href = "search_page.html";          
+        } else {
+				// do nothing and stay in login page
+        }
+      }
+	  
+    </script>
+
+    
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+			<div class="pagination-centered">
+			<img src="img/logo_hash.png">
+			</div>
+      </div>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="pagination-centered">
+			<input type="image" id="login" src="img/Login_Button.png" onclick="authUser();" alt="Login with facebook">
+        </div>
+		<div id="load_msg" class="pagination-centered">
+			<p> Loading... Please wait </p>
+		</div>
+      </div>
+
+      <hr>
+
+      <footer>
+		<div class="pagination-centered">
+		<p>Please login with your facebook account</p>
+		</div>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/bootstrap.js"></script>
+  </body>
+</html>

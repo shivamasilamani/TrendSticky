@@ -1,0 +1,252 @@
+﻿.status_msg {
+	padding: 20px 20px 20px 20px;
+	margin-bottom: 30px;
+	font-size:12px;
+	font-weight:600;
+	line-height: 30px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	color: #3d3d3d;
+	background-color: #ffffff; 
+	-webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+	
+	-ms-word-break: break-all;
+     word-break: break-all;
+
+     /* Non standard for webkit */
+     word-break: break-word;
+
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+    hyphens: auto;
+}
+
+.status_msg h1 {
+  margin-bottom: 0;
+  font-size: 60px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: inherit;
+}
+
+.status_msg h6 {
+  margin-bottom: 0;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: inherit;
+  padding-left:20px;
+}
+
+.status_msg h5 {
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: inherit;
+  text-align: center;
+}
+
+.status_msg li {
+  line-height: 30px;
+  list-style-type:none;
+}
+
+.status_msg a
+	{
+	text-decoration: none;
+	font-weight: 800;
+	color: #525252;
+	font-size: 15pt;
+	padding-right:20px;
+	}
+	
+.status_msg p
+	{
+	color: #525252;
+	font-size:10px;
+	}
+
+#tag
+	{
+	padding: 4px 10px 4px 10px;
+	float:right;
+	font-weight: 400;
+	background:#3ed68d;
+	color:#fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	}
+	
+#tag-photo
+	{
+	padding: 4px 10px 4px 10px;
+	float:right;
+	font-weight: 400;
+	background:#058df5;
+	color:#fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	}
+	
+#tag-video
+	{
+	padding: 4px 10px 4px 10px;
+	float:right;
+	font-weight: 400;
+	background:#b50ba1;
+	color:#fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	}
+	
+#tag-link
+	{
+	padding: 4px 10px 4px 10px;
+	float:right;
+	font-weight: 400;
+	background:#a80bcf;
+	color:#fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	}
+
+b
+	{
+	color: #0091c6;
+	font-weight:700;
+	}	
+
+.contain
+	{
+	width: 960px;
+	margin: 0px auto;
+	text-align: left;
+	}
+	
+#post
+	{
+	padding: 5px 20px 20px 20px;
+	background:#fff;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	}
+	
+#content p
+	{
+	padding-left:20px;
+	text-align:	justify;
+	color: #525252;
+	font-size:15px;
+	font-weight:600;
+	}
+	
+#content a
+	{
+	text-decoration: underline;
+	text-align:	justify;
+	color: #525252;
+	font-size:15px;
+	font-weight:600;
+	}
+	
+#content h2
+	{
+	padding-left:20px;
+	text-align:	justify;
+	color: #525252;
+	font-size:15px;
+	font-weight:600;
+	}
+	
+
+#details 
+	{
+	padding-top:20px;
+	text-align:	justify;
+	color: #878787;
+	font-size:12px;
+	}
+	
+#details p
+	{
+	padding-top:20px;
+	text-align:	justify;
+	color: #878787;
+	font-size:12px;
+	}
+	
+#details a
+	{
+	text-decoration: underline;
+	font-weight: 600;
+	padding: 20px 05px;
+	font-size:15px;
+	float:right;
+	}
+
+#details li
+	{
+	float:right;
+	list-style-type:none;
+	}
+	
+#load{
+  padding-top: 20px;
+  margin-bottom: 0;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: inherit;
+  padding-left:20px;
+  visibility:hidden;
+}
+
+#toTop {
+        border:1px solid #ccc;
+        background:#f7f7f7;
+        text-align:center;
+        padding:5px;
+        position:fixed; /* this is the magic */
+        bottom:10px; /* together with this to put the div at the bottom*/
+        right:10px;
+        cursor:pointer;
+        display:none;
+        color:#000000;
+        font-family:verdana;
+        font-size:11px;
+}
+
+#load_down{
+  padding-top: 10px;
+  margin-bottom: 0;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: inherit;
+  padding-left:20px;
+  visibility:hidden;
+}
+
+.highlight
+	{
+	color: #0091c6;
+	font-weight:700;
+	}	
+	
+h2
+	{
+	padding-left:20px;
+	text-align:	justify;
+	color: #525252;
+	font-size:15px;
+	font-weight:600;
+	}
+

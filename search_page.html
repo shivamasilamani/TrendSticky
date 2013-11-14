@@ -1,0 +1,540 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Trend Sticky </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	
+	<script src="phonegap.js"></script>
+	<script src="childbrowser.js"></script>
+	<script src="cdv-plugin-fb-connect.js"></script>
+	<script src="facebook-js-sdk.js"></script> 
+
+	<style type="text/css">
+			body {
+					padding-top: 30px;
+					padding-bottom: 40px;
+					
+			::-webkit-scrollbar {
+					width: 12px;
+				}
+ 
+			::-webkit-scrollbar-track {
+					background-color: #c2c2c2;
+				}
+ 
+			::-webkit-scrollbar-thumb {
+					background-color: #666;
+					-webkit-border-radius: 10px;
+				}
+				
+			::-webkit-scrollbar-button{ 
+					background-color: #666;
+				}
+					
+					
+				}
+    </style>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="css/custom_style.css" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="ico/favicon.png">
+	
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/highlight.js"></script>
+	
+  </head>
+
+  <body>
+  
+  <div id="fb-root"></div>
+  <!--<script src="http://connect.facebook.net/en_US/all.js"></script>-->
+  <script type="text/javascript">
+  
+	var user_id;
+	var access_token;
+	var dim = "";
+	var dim_2 = "";
+	
+	document.addEventListener('deviceready', function() {
+                                      try {
+                                      //alert('Device is ready');
+                                      FB.init({ appId: 509424099141300, nativeInterface: CDV.FB, useCachedDialogs: false });
+                                      } catch (e) {
+                                      alert(e);
+                                      }
+                                      }, false); 
+									  
+	 /*		 FB.init({
+				appId: 509424099141300,
+				xfbml: true,
+				status: true,
+				cookie: true,
+				});   */
+				
+									  
+			FB.Event.subscribe('auth.login', function(response) {
+                               if (response.status === 'connected') {
+										user_id = response.authResponse.userID;
+										access_token = response.authResponse.accessToken;
+										FB.api('/me',function(response) {
+												document.getElementById("welcome_text").innerHTML = response.name + '&nbsp<img src="https://graph.facebook.com/'+ response.id + '/picture?type=square" height="25px" width="25px"/>';
+											});
+								} else if (response.status === 'not_authorized') {
+										// the user isn't logged in to Facebook.
+										window.location.href = "index.html";     
+							
+								} else {
+										// the user isn't logged in to Facebook.
+										window.location.href = "index.html";  
+								}
+							   
+                               });
+            
+            FB.Event.subscribe('auth.logout', function(response) {
+                               });
+            
+            FB.Event.subscribe('auth.sessionChange', function(response) {
+									alert('Session changed');
+                               });
+            
+            FB.Event.subscribe('auth.statusChange', function(response) {
+                               if (response.status === 'connected') {
+										user_id = response.authResponse.userID;
+										access_token = response.authResponse.accessToken;
+										FB.api('/me',function(response) {
+												document.getElementById("welcome_text").innerHTML = response.name + '&nbsp<img src="https://graph.facebook.com/'+ response.id + '/picture?type=square" height="25px" width="25px"/>';
+											});
+								} else if (response.status === 'not_authorized') {
+										// the user isn't logged in to Facebook.
+										window.location.href = "index.html";     
+							
+								} else {
+										// the user isn't logged in to Facebook.
+										window.location.href = "index.html";    
+								}
+                               });
+	
+	  
+/*	FB.getLoginStatus(function(response) {
+				
+		});
+*/
+		
+	function fblogout(){
+			FB.logout(function(response) {
+						window.location.href = "index.html";
+			});
+	}
+	
+	function loadinsystem(url){ 
+			navigator.app.loadUrl(url, { openExternal:true }); 
+	} 
+	
+	function loadinchild(url){
+			window.plugins.childBrowser.showWebPage(url, { showLocationBar: false });
+	}
+	
+	function str_hlight(str,match_str){
+	
+           var final_str, pattern1, pattern2, pattern3;
+		   
+		   
+			   var mydiv = document.createElement("div");
+           mydiv.innerHTML = str;
+ 
+            if (document.all) // IE Stuff
+            {
+                str = mydiv.innerText;
+               
+            }   
+            else // Mozilla does not work with innerText
+            {
+                str =  mydiv.textContent;
+            }          
+			
+			//URLs starting with http://, https://, or ftp://
+			pattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+			final_str = str.replace(pattern1, '<a href="#" onclick="loadinsystem(\'$1\')" target="_blank">$1</a>');
+
+			//URLs starting with "www." (without // before it, or it'd re-link the ones done above).
+			pattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+			final_str = final_str.replace(pattern2, '$1<a href="#" onclick="loadinsystem(\'http://$2\')" target="_blank">$2</a>');
+
+			return final_str;
+	}
+	
+	function picture_size(pic_url){
+			var n = pic_url.replace("_t.jpg","_n.jpg");
+			var m = n.replace("_s.jpg","_n.jpg");
+			return m;
+	}
+	
+	function video_player(video_url){
+			//html = '<video width="320" height="240" controls><source src="' + video_url + '" type="video/mp4"><source src="' + video_url + '" type="video/ogg">Your browser does not support the video tag.</video>';
+			html = '<iframe src="' + video_url + '"> </iframe>';
+			return html;
+	
+	}
+	
+	function isCommunity(name){
+			if (typeof name === 'undefined'){
+				return 'Individual';
+				}
+			else{
+				return 'Community';
+				}
+	}
+	
+	function time_format(str){
+	
+			var date = new Date(str);
+			ti = '  ' + date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear() + ' / ' + date.getHours() + ':' + date.getMinutes();
+			return ti;
+	}
+	
+	function isHash(str){
+		
+		if(str[0] == '#'){
+				return true;
+		}
+		else{
+				return false
+		}
+	}
+	
+	function exact_match(str,search_str){
+			
+			var re = new RegExp(search_str,"i");
+			var n=str.search(re);
+			
+			if(n > -1){
+					return true;
+			}
+			else{
+					return false
+			}
+	}
+	
+	function clearSpace(){
+					document.getElementById("row1").innerHTML = "";
+					document.getElementById("row2").innerHTML = "";
+	}
+	
+	function input_valid(str){
+	
+			//var re = new RegExp(,"gi");
+			var str_percentage = str.replace(/%/gi,'%25');
+			var str_at = str_percentage.replace(/@/gi, '%40');
+			var str_dollar = str_at.replace(/\$/gi, '%24');
+			var str_hash = str_dollar.replace(/#/gi, '%23');
+			var str_ambersand = str_hash.replace(/&/gi, '%26');
+			var str_equal = str_ambersand.replace(/=/gi, '%3D');
+			var str_backslash  = str_equal.replace(/\\/gi, '%5C');
+			//var str_percentage = str_backslash.replace(/%/gi,'%25');
+			
+			return str_backslash;
+	
+	}
+	
+	function onBackKey(){
+		// do nothing
+	}
+	
+	document.addEventListener("backbutton", onBackKey, false);
+	
+		
+		function start_search2(url,search_string){
+			//var help_text = document.getElementById("help_text");
+			//if(document.getElementById("help_text") == "visible"){
+			//	document.getElementById("help_text").style.visibility = "hidden";
+			//}
+			//var search_string = document.getElementById("search_string").value;
+			
+			clearInterval(myVar);
+			document.getElementById("load_down").style.visibility = "visible";
+			
+							url = url.replace('https://graph.facebook.com', "");
+							FB.api(url, 'get',
+										function(respo) {
+												dim = "";
+												var len = respo.data.length;
+												if (len <= 0){
+													document.getElementById("row2").innerHTML = dim_2 + "<div class='status_msg'><h5> No more items to show </h5></div>";
+													script.url = null;
+													script.search_string = null;	
+													return 1;
+												}
+												else{
+													for(var i=0;i<len;i++){
+													
+													if(typeof respo.data[i].message != 'undefined'){
+														if(respo.data[i].type == "status"){
+																		//var html = '<div class="status_msg"> <h5>' + response.data[i].from.name + '</h5><h6>' + response.data[i].message + '</h6><p><a class="btn btn-default" href="https://facebook.com/'+ response.data[i].from.id +'" target="_blank">View details &raquo;</a></p></div>'
+																		var html = '<div class="status_msg"><div id="tag">'+ respo.data[i].type +'</div><p><img src="https://graph.facebook.com/'+ respo.data[i].from.id + '/picture?type=square"/> &nbsp <a onclick="loadinchild(\'https://facebook.com/'+ respo.data[i].from.id +'\')" href="#">' + respo.data[i].from.name + '</a>' + isCommunity(respo.data[i].from.category) + '</p><div id="content"><p><h2>'+ str_hlight(respo.data[i].message,search_string) +'</h2></p></div><div id="details"><a onclick="loadinchild(\'https://facebook.com/'+ respo.data[i].id +'\')" href="#" target="_blank">View in Facebook</a><p>' + time_format(respo.data[i].created_time) +  '</p></div></div>';
+																		dim_2 = dim_2 + html;
+																		document.getElementById("row2").innerHTML = dim_2;
+																		$("h2").highlight(search_string);
+														}
+														else if(respo.data[i].type == "photo"){
+															var html = '<div class="status_msg"><div id="tag-photo">'+ respo.data[i].type +'</div><p><img src="https://graph.facebook.com/'+ respo.data[i].from.id + '/picture?type=square"/> &nbsp <a href="#" onclick="loadinchild(\'https://facebook.com/'+ respo.data[i].from.id +'\')" target="_blank">' + respo.data[i].from.name + '</a>' + isCommunity(respo.data[i].from.category) + '</p><div id="content"><p><h2>'+ str_hlight(respo.data[i].message,search_string) +'</h2></p><p><a href="#" onclick="loadinchild(\''+ respo.data[i].link +'\')" target="_blank"><img src="'+ picture_size(respo.data[i].picture) +'"></a></p></div><div id="details"><a onclick="loadinchild(\''+ respo.data[i].link +'\')" href="#" target="_blank">View in Facebook</a><p>' + time_format(respo.data[i].created_time) +  '</p></div></div>';
+															dim_2 = dim_2 + html;
+															document.getElementById("row2").innerHTML = dim_2;
+															$("h2").highlight(search_string);
+														}
+														else if(respo.data[i].type == "link"){
+															var html = '<div class="status_msg"><div id="tag-link">'+ respo.data[i].type +'</div><p><img src="https://graph.facebook.com/'+ respo.data[i].from.id + '/picture?type=square"/> &nbsp <a href="#" onclick="loadinchild(\'https://facebook.com/'+ respo.data[i].from.id +'\')" target="_blank">' + respo.data[i].from.name + '</a>' + isCommunity(respo.data[i].from.category) + '</p><div id="content"><p><h2>'+ str_hlight(respo.data[i].message,search_string) +'</h2></p><p><a href="#" onclick="loadinsystem(\''+ respo.data[i].link +'\')" target="_blank"><img src="'+ respo.data[i].picture+'"></a> &nbsp <a href="#" onclick="loadinsystem(\''+ respo.data[i].link +'\')" target="_blank">' + respo.data[i].name + '</a> </p></div><div id="details"><a href="#" onclick="loadinchild(\'https://facebook.com/'+ respo.data[i].id +'\')" target="_blank">View in Facebook</a><p>' + time_format(respo.data[i].created_time) +  '</p></div></div>';
+															dim_2 = dim_2 + html;
+															document.getElementById("row2").innerHTML = dim_2;
+															$("h2").highlight(search_string);
+														}
+														
+														else if(respo.data[i].type == "video"){
+															var html = '<div class="status_msg"><div id="tag-video">'+ respo.data[i].type +'</div><p><img src="https://graph.facebook.com/'+ respo.data[i].from.id + '/picture?type=square"/> &nbsp <a href="#" onclick="loadinchild(\'https://facebook.com/'+ respo.data[i].from.id +'\')" target="_blank">' + respo.data[i].from.name + '</a>' + isCommunity(respo.data[i].from.category) + '</p><div id="content"><p><h2>'+ str_hlight(respo.data[i].message,search_string) +'</h2></p><p><a href="#" onclick="loadinsystem(\''+ respo.data[i].link +'\')" target="_blank"><img src="'+ respo.data[i].picture +'"></a> <a href="#" onclick="loadinsystem(\''+ respo.data[i].link +'\')"  target="_blank">' + respo.data[i].name + '</a> </p></div><div id="details"><a href="#" onclick="loadinchild(\'https://facebook.com/'+ respo.data[i].id +'\')" target="_blank">View in Facebook</a><p>' + time_format(respo.data[i].created_time) +  '</p></div></div>';
+															dim_2 = dim_2 + html;
+															document.getElementById("row2").innerHTML = dim_2;
+															$("h2").highlight(search_string);
+														}
+														
+														}
+														
+												}
+													script = document.createElement("script");
+													script.url = respo.paging.next;
+													script.search_string = search_string;												
+												    //start_search3(respo.paging.next,search_string);
+											}
+										});
+										
+				var myVar=setInterval(function(){myTimer()},5000);
+				function myTimer()
+				{
+						document.getElementById("load_down").style.visibility = "hidden";
+				}
+										
+			//document.getElementById("load_down").style.visibility = "hidden";
+	}
+	
+	function start_search(){
+			//var help_text = document.getElementById("help_text");
+			//if(document.getElementById("help_text").style.visibility == "visible"){
+			//	document.getElementById("help_text").style.visibility = "hidden";
+			//}
+						
+			clearSpace();
+			dim_2 = "";
+			
+			document.getElementById("load").style.visibility = "visible";
+			var search_string = document.getElementById("search_string").value;
+			
+			if(search_string == ""){
+					document.getElementById("load").style.visibility = "hidden";
+					document.getElementById("row1").innerHTML = "<div class='status_msg'><h5> Are you kidding me?!!! Type something to search </h5></div>";
+				
+			}
+			
+			else{
+			
+			FB.getLoginStatus(function(response) {
+				if (response.status === 'connected') {
+							user_id = response.authResponse.userID;
+							access_token = response.authResponse.accessToken;
+							FB.api('/search?q='+input_valid(search_string)+'&type=post&access_token='+access_token+'&limit=15', 'get',
+										function(response) {
+										
+												if(typeof response.error != 'undefined'){
+														if(error.code == 100){
+																	document.getElementById("load").style.visibility = "hidden";
+																	document.getElementById("row1").innerHTML = "<div class='status_msg'><h5> Something went wrong. Please try again </h5></div>";
+														}
+														else if(error.code == 190){
+												
+															window.location.href = "index.html"; 
+															
+															}
+															
+														else{
+																	document.getElementById("load").style.visibility = "hidden";
+																	document.getElementById("row1").innerHTML = "<div class='status_msg'><h5> Something went wrong. Please try again </h5></div>";
+														}
+													}
+													else{
+													
+										
+												dim = "";
+												var len = response.data.length;
+												if (len <= 0){
+													document.getElementById("load").style.visibility = "hidden";
+													document.getElementById("row1").innerHTML = "<div class='status_msg'><h5>Sorry no item matched your query </h5></div>";
+												}
+												else{
+													for(var i=0;i<len;i++){
+													
+													if(typeof response.data[i].message != 'undefined'){
+														if(response.data[i].type == "status"){
+																		//var html = '<div class="status_msg"> <h5>' + response.data[i].from.name + '</h5><h6>' + response.data[i].message + '</h6><p><a class="btn btn-default" href="https://facebook.com/'+ response.data[i].from.id +'" target="_blank">View details &raquo;</a></p></div>'
+																		var html = '<div class="status_msg"><div id="tag">'+ response.data[i].type +'</div><p><img src="https://graph.facebook.com/'+ response.data[i].from.id + '/picture?type=square"/> &nbsp <a onclick="loadinchild(\'https://facebook.com/'+ response.data[i].from.id +'\')" href="#" target="_blank">' + response.data[i].from.name + '</a>' + isCommunity(response.data[i].from.category) + '</p><div id="content"><p><h2>'+ str_hlight(response.data[i].message,search_string) +'</h2></p></div><div id="details"><a onclick="loadinchild(\'https://facebook.com/'+ response.data[i].id +'\')" href="#" target="_blank">View in Facebook</a><p>' + time_format(response.data[i].created_time) +  '</p></div></div>';
+																		var dim = dim + html;
+																		document.getElementById("row1").innerHTML = dim;
+																		$("h2").highlight(search_string);
+																		
+																		}
+														else if(response.data[i].type == "photo"){
+															var html = '<div class="status_msg"><div id="tag-photo">'+ response.data[i].type +'</div><p><img src="https://graph.facebook.com/'+ response.data[i].from.id + '/picture?type=square"/> &nbsp <a href="#" onclick="loadinchild(\'https://facebook.com/'+ response.data[i].from.id +'\')" target="_blank">' + response.data[i].from.name + '</a>' + isCommunity(response.data[i].from.category) + '</p><div id="content"><p><h2>'+ str_hlight(response.data[i].message,search_string) +'</h2></p><p><a href="#" onclick="loadinchild(\''+ response.data[i].link +'\')" target="_blank"><img src="'+ picture_size(response.data[i].picture) +'"></a></p></div><div id="details"><a href="#" onclick="loadinchild(\''+ response.data[i].link +'\')" target="_blank">View in Facebook</a><p>' + time_format(response.data[i].created_time) +  '</p></div></div>';
+															var dim = dim + html;
+															document.getElementById("row1").innerHTML = dim;
+															$("h2").highlight(search_string);
+														}
+														else if(response.data[i].type == "link"){
+															var html = '<div class="status_msg"><div id="tag-link">'+ response.data[i].type +'</div><p><img src="https://graph.facebook.com/'+ response.data[i].from.id + '/picture?type=square"/> &nbsp <a href="#" onclick="loadinchild(\'https://facebook.com/'+ response.data[i].from.id +'\')" target="_blank">' + response.data[i].from.name + '</a>' + isCommunity(response.data[i].from.category) + '</p><div id="content"><p><h2>'+ str_hlight(response.data[i].message,search_string) +'</h2></p><p><a href="#" onclick="loadinsystem(\''+ response.data[i].link +'\')" target="_blank"><img src="'+ response.data[i].picture+'"></a> &nbsp <a href="#" onclick="loadinsystem(\'' + response.data[i].link + '\')" target="_blank">' + response.data[i].name + '</a> </p></div><div id="details"><a href="#" onclick="loadinchild(\'https://facebook.com/'+ response.data[i].id +'\')" target="_blank">View in Facebook</a><p>' + time_format(response.data[i].created_time) +  '</p></div></div>';
+															var dim = dim + html;
+															document.getElementById("row1").innerHTML = dim;
+															$("h2").highlight(search_string);
+														}
+														
+														else if(response.data[i].type == "video"){
+															var html = '<div class="status_msg"><div id="tag-video">'+ response.data[i].type +'</div><p><img src="https://graph.facebook.com/'+ response.data[i].from.id + '/picture?type=square"/> &nbsp <a href="#" onclick="loadinchild(\'https://facebook.com/'+ response.data[i].from.id +'\')" target="_blank">' + response.data[i].from.name + '</a>' + isCommunity(response.data[i].from.category) + '</p><div id="content"><p><h2>'+ str_hlight(response.data[i].message,search_string) +'</h2></p><p><a href="#" onclick="loadinsystem(\'' + response.data[i].link + '\')" target="_blank"><img src="'+ response.data[i].picture +'"></a> <a href="#" onclick="loadinsystem(\'' + response.data[i].link + '\')" target="_blank">' + response.data[i].name + '</a> </p></div><div id="details"><a href="#" onclick="loadinchild(\'https://facebook.com/'+ response.data[i].id +'\')" target="_blank">View in Facebook</a><p>' + time_format(response.data[i].created_time) +  '</p></div></div>';
+															var dim = dim + html;
+															document.getElementById("row1").innerHTML = dim;
+															$("h2").highlight(search_string);
+														}
+														
+													}
+													}
+													//document.getElementById("row1").innerHTML = dim;
+													document.getElementById("load").style.visibility = "hidden";
+													start_search2(response.paging.next,search_string);
+											}
+											}
+										});
+					}
+					else{
+
+					window.location.href = "index.html"; 	
+				
+				}
+				});
+				
+				dim = "";
+				}
+	}
+	
+	</script>
+	
+	<script type="text/javascript">
+						$(function() {
+										$(window).scroll(function() {
+												if($(this).scrollTop() != 0) {
+														$('#toTop').fadeIn();	
+												} else {
+														$('#toTop').fadeOut();
+														}
+											});
+ 
+						$('#toTop').click(function() {
+						$('body,html').animate({scrollTop:0},800);
+			});	
+		});
+		
+			$(window).scroll(function(){
+						if  ($(window).scrollTop() == $(document).height() - $(window).height()){
+								if( script.url != null && script.search_string != null ){
+									start_search2(script.url,script.search_string);
+									}
+				}
+			}); 
+</script>
+  
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" onclick="search_page.html">Trend Sticky </a>
+		  <div class="nav-collapse collapse">
+            <div class="navbar-form pull-right">
+			<ul class="nav">
+				<li><a href="search_page.html"><div id="welcome_text"></div></a></li> 
+				<li><a href="#" onclick="fblogout();">Logout <img src="img/Logout.png" height="25px" width="25px"></a></li> 
+			</ul>
+            </div>
+          </div>
+        </div>
+      </div>
+	 </div>
+  
+	
+    <div class="container">
+       <div class="hero-unit"> 
+			<div class="form-search pagination-centered">
+			<div class="input-append">
+			<input type="text" class="search-query" placeholder="Type any keyword..." id="search_string" onkeydown="if (event.keyCode == 13) document.getElementById('search_button').click()">
+			<!--<button type="submit" class="btn" id="search_button" onclick="start_search();"><i class="icon-search"></i></button> -->
+			<button class="btn btn-primary" id="search_button" onclick="start_search();">Search <i class="icon-white icon-search"></i></button>
+			</div>
+			</div>
+						 <div class="pagination-centered" id="load">Loading...</div>
+	  </div>
+	  
+			 <!--<div id="toTop">Back to Top</div>-->
+			 <button class="btn" id="toTop"><i class="icon-circle-arrow-up"></i>  </button>
+			<div class="row" id="row1">
+			
+				  <div class="pagination-centered" id="help_text">
+						<img src="img/type.png">
+		</div>
+      <!--      <div>
+              <h2>Heading</h2>
+              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+              <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+            </div>
+            <div>
+              <h2>Heading</h2>
+              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+              <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+            </div>
+            <div>
+              <h2>Heading</h2>
+              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+              <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+            </div>
+            <div>
+              <h2>Heading</h2>
+              <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+              <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+            </div>   -->
+
+          </div><!--/row-->
+		  
+		  <div class="row" id="row2">
+		  </div>
+		  
+			</div>
+				 <div class="pagination-centered" id="load_down">Loading...</div>
+			</div>
+
+      <footer>
+		<div class="span11 pagination-centered">
+		</div>
+      </footer>
+
+    </div> 
+    <script src="js/bootstrap.js"></script>
+  </body>
+</html>
